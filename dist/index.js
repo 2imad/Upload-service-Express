@@ -16,7 +16,7 @@ const fs = require("fs");
 const path = require("path");
 const Loki = require("lokijs");
 const utils_1 = require("./utils");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const DB_NAME = "db.json";
 const COLLECTION_NAME = "images";
 const UPLOAD_PATH = "uploads";
@@ -24,6 +24,11 @@ const upload = multer({ dest: `${UPLOAD_PATH}`, fileFilter: utils_1.imageFilter 
 const db = new Loki(`${UPLOAD_PATH}/${DB_NAME}`, { persistenceMethod: "fs" });
 const app = express();
 app.use(cors());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
